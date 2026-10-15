@@ -1,0 +1,11 @@
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Archivos locales que no deben publicarse
+.env
+.env.*
+!.env.example
+

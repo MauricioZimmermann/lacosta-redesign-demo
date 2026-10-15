@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vinícolas · La Costa Vinoteca</title>
+  <meta name="description" content="As vinícolas argentinas do catálogo La Costa: Achaval Ferrer, Catena Zapata, Susana Balbo, Rutini e muitas outras.">
+  <meta name="theme-color" content="#2A0A14">
+  <link rel="icon" href="assets/img/site/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="vinicolas">
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="Você está em"><a href="index.html">Início</a><svg class="ic ic--sm" aria-hidden="true"><use href="#i-chev-r"/></svg><span aria-current="page">Vinícolas</span></nav>
+        <p class="eyebrow eyebrow--gold">Curadoria</p>
+        <h1 class="page-title">Vinícolas</h1>
+        <p class="page-sub" data-vin-sub>Produtores selecionados de Mendoza, Salta, Patagônia e além.</p>
+        <label class="page-search">
+          <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" placeholder="Buscar vinícola" aria-label="Buscar vinícola" data-vin-q>
+        </label>
+        <nav class="az" aria-label="Índice alfabético" data-az></nav>
+      </div>
+    </section>
+    <section class="section section--flush">
+      <div class="container" data-vin-list aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script>
+  (() => {
+    const { $, esc, norm, url, BRANDS } = LC;
+    const letter = b => { const c = norm(b.nome).charAt(0).toUpperCase(); return /[A-Z]/.test(c) ? c : '#'; };
+    const groups = {};
+    BRANDS.forEach(b => (groups[letter(b)] ||= []).push(b));
+    const letters = Object.keys(groups).sort();
+    $('[data-vin-sub]').textContent = `${BRANDS.length} vinícolas e marcas no catálogo · toque para ver os rótulos`;
+    $('[data-az]').innerHTML = letters.map(l => `<a href="#letra-${l === '#' ? 'num' : l}">${l}</a>`).join('');
+    const tile = b => `<li><a class="vtile" href="${url.catalog({ vinicola: b.slug })}">
+      <span class="vtile__logo">${b.logo ? `<img src="${b.logo}" alt="" loading="lazy" decoding="async">` : `<span class="monogram">${esc(b.nome.replace(/^(Bodega|Familia|Família)\s+/i, '').charAt(0))}</span>`}</span>
+      <span class="vtile__name">${esc(b.nome)}</span><span class="vtile__n">${b.n} rótulo${b.n > 1 ? 's' : ''}</span></a></li>`;
+    function render(q = '') {
+      const nq = norm(q);
+      const html = letters.map(l => {
+        const items = groups[l].filter(b => !nq || norm(b.nome).includes(nq));
+        return items.length ? `<div class="vgroup" id="letra-${l === '#' ? 'num' : l}"><h2 class="vgroup__letter">${l}</h2><ul class="vgrid">${items.map(tile).join('')}</ul></div>` : '';
+      }).join('');
+      $('[data-vin-list]').innerHTML = html || `<div class="grid-empty"><h2>Nenhuma vinícola encontrada</h2><p>Confira a grafia ou <a class="link-arrow" href="${url.catalog({ q })}">busque “${esc(q)}” no catálogo</a>.</p></div>`;
+      $('[data-az]').hidden = !!nq;
+    }
+    $('[data-vin-q]').addEventListener('input', e => render(e.target.value));
+    render();
+    LC.init();
+  })();
+  </script>
+</body>
+</html>

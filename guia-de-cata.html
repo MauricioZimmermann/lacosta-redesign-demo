@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guia de degustação de vinhos · La Costa Vinoteca</title>
+  <meta name="description" content="Técnicas, etapas e conceitos essenciais para degustar vinhos: preparação, análise visual, olfativa e gustativa.">
+  <meta name="theme-color" content="#2A0A14">
+  <link rel="icon" href="assets/img/site/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="guia-de-cata">
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="Você está em"><a href="index.html">Início</a><svg class="ic ic--sm" aria-hidden="true"><use href="#i-chev-r"/></svg><span aria-current="page">Guia de degustação</span></nav>
+        <p class="eyebrow eyebrow--gold">Aprenda a degustar</p>
+        <h1 class="page-title">Guia de degustação de vinhos</h1>
+        <p class="page-sub">Técnicas, etapas e conceitos essenciais para aproveitar cada taça, do preparo ao final de boca.</p>
+      </div>
+    </section>
+    <section class="section section--flush">
+      <div class="container doc">
+        <nav class="toc" aria-label="Nesta página" data-toc><p class="eyebrow">Nesta página</p></nav>
+        <article class="doc__body prose prose--doc" data-guide></article>
+      </div>
+    </section>
+    <section class="section section--tint">
+      <div class="container">
+        <header class="section__head section__head--split">
+          <div><p class="eyebrow eyebrow--gold">Coloque em prática</p><h2 class="h2">Rótulos para começar</h2></div>
+          <a class="link-arrow" href="catalogo.html?colecao=mais-vendido">Ver mais vendidos <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </header>
+        <div class="grid" data-picks></div>
+      </div>
+    </section>
+  </main>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script>
+  (() => {
+    const { $, esc, DATA, PRODUCTS, cardHTML } = LC;
+    const g = (DATA.guia || []).filter(x => !/^Guia de Cata/i.test(x.x));
+    const out = [], toc = [];
+    let list = null, n = 0;
+    const flush = () => { if (list) { out.push(`<ul>${list.join('')}</ul>`); list = null; } };
+    const nested = new Set();
+    g.forEach(x => { if (x.t === 'LI' && x.x.includes('\n')) x.x.split('\n').slice(1).forEach(l => nested.add(l.trim())); });
+    g.forEach(x => {
+      if (x.t === 'LI') {
+        if (nested.has(x.x)) return;
+        const [head, ...rest] = x.x.split('\n');
+        (list ||= []).push(rest.length ? `<li><strong>${esc(head)}</strong><span>${rest.map(esc).join('<br>')}</span></li>` : `<li>${esc(x.x)}</li>`);
+        return;
+      }
+      flush();
+      if (/^H[1-4]$/.test(x.t)) {
+        const id = 'sec-' + (++n);
+        const title = x.x.replace(/^\d+\.\s*/, '');
+        toc.push(`<a href="#${id}">${esc(title)}</a>`);
+        out.push(`<h2 id="${id}"><span class="prose__n">${n}</span>${esc(title)}</h2>`);
+      } else out.push(`<p>${esc(x.x)}</p>`);
+    });
+    flush();
+    $('[data-guide]').innerHTML = out.join('');
+    $('[data-toc]').insertAdjacentHTML('beforeend', toc.join(''));
+    const picks = PRODUCTS.filter(p => p.tags.includes('mais-vendido')).slice(0, 4);
+    $('[data-picks]').innerHTML = picks.map(cardHTML).join('');
+    LC.init();
+  })();
+  </script>
+</body>
+</html>

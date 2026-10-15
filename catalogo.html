@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo · La Costa Vinoteca</title>
+  <meta name="description" content="Vinhos argentinos, espumantes e destilados com preços em reais. Filtre por tipo, uva, vinícola e faixa de preço e monte sua cota de 16 garrafas.">
+  <meta name="theme-color" content="#2A0A14">
+  <link rel="icon" href="assets/img/site/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="catalogo">
+  <main id="main">
+    <section class="page-hero page-hero--compact">
+      <div class="container">
+        <nav class="crumbs" aria-label="Você está em" data-crumbs></nav>
+        <div class="page-hero__row">
+          <div class="page-hero__brand" data-cat-logo hidden></div>
+          <div>
+            <h1 class="page-title" data-cat-title>Catálogo</h1>
+            <p class="page-sub" data-cat-sub></p>
+          </div>
+        </div>
+        <div class="pills" role="group" aria-label="Coleções" data-colecoes></div>
+      </div>
+    </section>
+
+    <section class="container catalog">
+      <aside class="filters" aria-label="Filtros" data-filters></aside>
+      <div class="catalog__main">
+        <div class="catalog__bar">
+          <button class="btn btn--ghost filters-open" type="button" data-filters-open><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Filtrar <span class="count-pill" data-filters-count hidden></span></button>
+          <p class="catalog__count" data-count aria-live="polite"></p>
+          <label class="sort">
+            <span class="hide-sm">Ordenar por</span>
+            <select data-sort aria-label="Ordenar por">
+              <option value="relevancia">Relevância</option>
+              <option value="menor">Menor preço</option>
+              <option value="maior">Maior preço</option>
+              <option value="nome">Nome (A–Z)</option>
+            </select>
+          </label>
+        </div>
+        <div class="active-filters" data-active></div>
+        <div class="cota-strip" data-meter-card>
+          <div class="cota-strip__txt"><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg><span><strong data-meter-count>0</strong>/16 garrafas · <span data-meter-hint>Faltam 16 para liberar −20%</span></span></div>
+          <div class="meter meter--sm" role="progressbar" aria-label="Progresso da cota" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0" data-meter></div>
+        </div>
+        <div class="grid grid--catalog" data-results></div>
+        <div class="load-more" data-more-wrap>
+          <p data-more-info></p>
+          <button class="btn btn--ghost btn--lg" type="button" data-more>Carregar mais rótulos</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="sheet sheet--left filters-sheet" id="filters-sheet" aria-labelledby="fs-title">
+    <div class="sheet__head">
+      <h2 class="drawer__title" id="fs-title">Filtrar</h2>
+      <button class="icon-btn" type="button" aria-label="Fechar filtros" data-close><svg class="ic ic--lg" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="filters-sheet__body" data-filters-m></div>
+    <div class="filters-sheet__foot">
+      <button class="btn btn--ghost" type="button" data-clear-all>Limpar</button>
+      <button class="btn btn--primary" type="button" data-close data-apply>Ver rótulos</button>
+    </div>
+  </dialog>
+
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/catalogo.js"></script>
+</body>
+</html>
