@@ -3,6 +3,7 @@
 Thumbs.db
 .vscode/
 .idea/
+node_modules/
 
 # Archivos locales que no deben publicarse
 .env
