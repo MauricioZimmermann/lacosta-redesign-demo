@@ -9,3 +9,7 @@ Thumbs.db
 .env.*
 !.env.example
 
+# Salida generada para Cloudflare
+dist/
+.wrangler/
+
